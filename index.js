@@ -40,8 +40,24 @@ app.post('/api/v1/tours', (req, res) => {
       });
     }
   );
+});
 
-  // res.send('done');
+app.get('/api/v1/tours/:id', (req, res) => {
+  const id = +req.params.id;
+  const tour = tours.find((item) => item.id === id);
+  // res.send('sended!');
+  if (!tour) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'invalid ID',
+    });
+  }
+  res.status(200).json({
+    status: 'success',
+    data: {
+      tour: tour,
+    },
+  });
 });
 
 // getting data with streams and pipe :
