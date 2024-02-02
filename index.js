@@ -98,6 +98,29 @@ app.put('/api/v1/tours/:id', (req, res) => {
   );
 });
 
+// delete endpoint
+
+app.delete('/api/v1/tours/:id', (req, res) => {
+  const id = +req.params.id;
+  if (id > tours.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'invalid ID',
+    });
+  }
+  const tour = tours.filter((item) => item.id !== id);
+  fs.writeFile(
+    `${__dirname}/dev-data/data/tours-simple.json`,
+    JSON.stringify(tour),
+    (err) => {
+      res.status(204).json({
+        status: 'success',
+        data: null,
+      });
+    }
+  );
+});
+
 // getting data with streams and pipe :
 // app.get('/api/v1/tours', (req, res) => {
 //   const readeabale = fs.createReadStream('./dev-data/data/tours-simple.json');
