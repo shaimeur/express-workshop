@@ -12,7 +12,7 @@ const tours = JSON.parse(
 );
 
 // get All tours
-app.get('/api/v1/tours', (req, res) => {
+const getAllTours = (req, res) => {
   res.status(200).json({
     status: 'success',
     results: tours.length,
@@ -20,10 +20,11 @@ app.get('/api/v1/tours', (req, res) => {
       tours: tours,
     },
   });
-});
+};
 
 // get one tour
-app.get('/api/v1/tours/:id', (req, res) => {
+
+const getOneTour = (req, res) => {
   const id = +req.params.id;
   const tour = tours.find((item) => item.id === id);
   // res.send('sended!');
@@ -39,10 +40,10 @@ app.get('/api/v1/tours/:id', (req, res) => {
       tour: tour,
     },
   });
-});
+};
 
 // post one new tour
-app.post('/api/v1/tours', (req, res) => {
+const createTour = (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
   const newTour = Object.assign({ id: newId }, req.body);
 
@@ -63,11 +64,11 @@ app.post('/api/v1/tours', (req, res) => {
       });
     }
   );
-});
+};
 
 // update a tour
 
-app.put('/api/v1/tours/:id', (req, res) => {
+const updateTour = (req, res) => {
   const id = +req.params.id;
 
   const tour = tours.find((item) => item.id === id);
@@ -96,11 +97,10 @@ app.put('/api/v1/tours/:id', (req, res) => {
       });
     }
   );
-});
+};
 
 // delete endpoint
-
-app.delete('/api/v1/tours/:id', (req, res) => {
+const deleteTour = (req, res) => {
   const id = +req.params.id;
   if (id > tours.length) {
     return res.status(404).json({
@@ -119,7 +119,22 @@ app.delete('/api/v1/tours/:id', (req, res) => {
       });
     }
   );
-});
+};
+
+// Our Routes
+// app.get('/api/v1/tours', getAllTours);
+// app.get('/api/v1/tours/:id', getOneTour);
+// app.post('/api/v1/tours', createTour);
+// app.put('/api/v1/tours/:id', updateTour);
+// app.delete('/api/v1/tours/:id', deleteTour);
+
+app.route('/api/v1/tours').get(getAllTours).post(createTour);
+
+app
+  .route('/api/v1/tours/:id')
+  .update(updateTour)
+  .get(getOneTour)
+  .delete(deleteTour);
 
 // getting data with streams and pipe :
 // app.get('/api/v1/tours', (req, res) => {
