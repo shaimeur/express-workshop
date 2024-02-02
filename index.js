@@ -34,9 +34,8 @@ app.post('/api/v1/tours', (req, res) => {
       }
       res.status(201).json({
         status: 'success',
-        results: tours.length,
         data: {
-          tours: tours,
+          tour: newTour,
         },
       });
     }
