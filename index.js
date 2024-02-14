@@ -6,6 +6,17 @@ const port = 2670;
 // middleware
 app.use(express.json());
 
+// creating our ouwn middleware
+
+app.use((req, res, next) => {
+  console.log('hello from your own middleware!!');
+  next();
+});
+
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+});
 // reading the tours-simple json file synchronouslly
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
@@ -13,6 +24,7 @@ const tours = JSON.parse(
 
 // get All tours
 const getAllTours = (req, res) => {
+  console.log(req.requestTime);
   res.status(200).json({
     status: 'success',
     results: tours.length,
@@ -132,7 +144,7 @@ app.route('/api/v1/tours').get(getAllTours).post(createTour);
 
 app
   .route('/api/v1/tours/:id')
-  .update(updateTour)
+  .put(updateTour)
   .get(getOneTour)
   .delete(deleteTour);
 
