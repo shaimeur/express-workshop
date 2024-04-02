@@ -135,6 +135,36 @@ const deleteTour = (req, res) => {
   );
 };
 
+const getAllUsers = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    massage: 'this route not yet defined',
+  });
+};
+const createUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    massage: 'this route not yet defined',
+  });
+};
+const updateUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    massage: 'this route not yet defined',
+  });
+};
+const getOneUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    massage: 'this route not yet defined',
+  });
+};
+const deleteUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    massage: 'this route not yet defined',
+  });
+};
 // Our Routes
 // app.get('/api/v1/tours', getAllTours);
 // app.get('/api/v1/tours/:id', getOneTour);
@@ -142,6 +172,7 @@ const deleteTour = (req, res) => {
 // app.put('/api/v1/tours/:id', updateTour);
 // app.delete('/api/v1/tours/:id', deleteTour);
 
+// Tours Routes
 app.route('/api/v1/tours').get(getAllTours).post(createTour);
 
 app
@@ -149,6 +180,16 @@ app
   .put(updateTour)
   .get(getOneTour)
   .delete(deleteTour);
+
+// User Routes
+
+app.route('/api/v1/users').get(getAllUsers).post(createUser);
+
+app
+  .route('api/v1/users/:id')
+  .put(updateUser)
+  .get(getOneUser)
+  .delete(deleteUser);
 
 // getting data with streams and pipe :
 // app.get('/api/v1/tours', (req, res) => {
