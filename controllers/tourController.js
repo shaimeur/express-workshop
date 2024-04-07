@@ -4,6 +4,21 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
 
+// checkBody Middleware
+
+const checkBody = (req, res, next) => {
+  const { name, price } = req.body;
+  // console.log(name);
+  // console.log(price);
+  if (!name || !price) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Missing name or price',
+    });
+  }
+  next();
+};
+
 // param middleware
 
 const checkId = (req, res, next, val) => {
@@ -53,7 +68,7 @@ const createTour = (req, res) => {
   tours.push(newTour);
 
   fs.writeFile(
-    `${__dirname}/dev-data/data/tours-simple.json`,
+    `${__dirname}/../dev-data/data/tours-simple.json`,
     JSON.stringify(tours),
     (err) => {
       if (err) {
@@ -121,4 +136,5 @@ module.exports = {
   updateTour,
   createTour,
   checkId,
+  checkBody,
 };
