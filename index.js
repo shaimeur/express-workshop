@@ -7,6 +7,8 @@ const tourRouter = require('./routes/tourRoutes');
 // middleware
 app.use(morgan('dev'));
 app.use(express.json());
+// this how we serve a static file in express
+app.use(express.static('public'));
 
 // creating our ouwn middleware
 
