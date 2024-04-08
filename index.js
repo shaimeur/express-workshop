@@ -5,7 +5,10 @@ const app = express();
 const userRouter = require('./routes/userRoutes');
 const tourRouter = require('./routes/tourRoutes');
 // middleware
-app.use(morgan('dev'));
+
+if (process.env.NODE_ENV === 'developement') {
+  app.use(morgan('dev'));
+}
 app.use(express.json());
 // this how we serve a static file in express
 app.use(express.static('public'));
