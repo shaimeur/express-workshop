@@ -9,3 +9,7 @@ console.log(app.get('env'));
 app.listen(port, host, () => {
   console.log(`server is listening to http://${host}:${port}`);
 });
+
+const x = 66;
+
+x = 0;
