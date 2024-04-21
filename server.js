@@ -15,8 +15,8 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then((con) => {
-    console.log(con.connections);
+  .then(() => {
+    // console.log(con.connections);
     console.log('Database connected successfully');
   })
   .catch((err) => {
@@ -40,6 +40,20 @@ const tourSchema = new mongoose.Schema({
 });
 
 const Tour = mongoose.model('Tour', tourSchema);
+
+const testTour = new Tour({
+  name: 'The Park Camper',
+  rating: 4.7,
+  price: 997,
+});
+testTour
+  .save()
+  .then((doc) => {
+    console.log(doc);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 console.log(app.get('env'));
 // console.log(process.env.USERNAM);
 
