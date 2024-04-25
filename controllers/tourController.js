@@ -62,21 +62,31 @@ const getOneTour = (req, res) => {
 
 // post one new tour
 const createTour = async (req, res) => {
-  const { name, rating, price } = req.body;
+  try {
+    const { name, rating, price } = req.body;
 
-  const newTour = {
-    name,
-    rating,
-    price,
-  };
-  console.log(newTour);
+    const newTour = {
+      name,
+      rating,
+      price,
+    };
+    console.log(newTour);
 
-  const createdTour = await Tour.create(newTour);
+    const createdTour = await Tour.create(newTour);
 
-  res.status(201).json({
-    message: 'Tour added with success!!',
-    createdTour,
-  });
+    res.status(201).json({
+      status: 'success',
+      data: {
+        message: 'tour created succeffuly !!',
+        createdTour,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: 'fail',
+      message: error,
+    });
+  }
 
   // const newId = tours[tours.length - 1].id + 1;
   // const newTour = Object.assign({ id: newId }, req.body);
@@ -130,16 +140,31 @@ const updateTour = (req, res) => {
 
 // delete endpoint
 const deleteTour = async (req, res) => {
-  const id = req.params.id;
+  try {
+    const id = req.params.id;
 
-  console.log(id);
+    console.log(id);
 
-  const deletedTour = await Tour.deleteOne({ _id: id });
-  console.log('====>', deleteTour);
-  res.status(200).json({
-    message: 'Tour deleted with success !!',
-    deletedTour,
-  });
+    const deletedTour = await Tour.findByIdAndDelete({ _id: id });
+    // if (!deletedTour) {
+    //   return res.status(400).json({
+    //     status: 'fail',
+    //     message: 'tour not found!!',
+    //   });
+    // }
+    console.log('====>', deletedTour);
+    res.status(200).json({
+      status: 'success',
+      message: 'Tour deleted with success !!',
+      deletedTour,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: 'fail',
+      message: error,
+    });
+  }
+
   // const id = +req.params.id;
 
   // const tour = tours.filter((item) => item.id !== id);
