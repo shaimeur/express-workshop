@@ -34,30 +34,48 @@ const checkId = (req, res, next, val) => {
   next();
 };
 // get All tours
-const getAllTours = (req, res) => {
-  console.log(req.requestTime);
-  res.status(200).json({
-    status: 'success',
-    results: tours.length,
-    data: {
-      tours: tours,
-    },
-  });
+const getAllTours = async (req, res) => {
+  // console.log(req.requestTime);
+  try {
+    const tours = await Tour.find();
+
+    res.status(200).json({
+      status: 'success',
+      count: tours.length,
+      data: {
+        tours,
+      },
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: 'fail',
+      message: error,
+    });
+  }
 };
 
 // get one tour
 
-const getOneTour = (req, res) => {
-  const id = +req.params.id;
-  const tour = tours.find((item) => item.id === id);
+const getOneTour = async (req, res) => {
+  // const id = +req.params.id;
+  // const tour = tours.find((item) => item.id === id);
   // res.send('sended!');
 
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour: tour,
-    },
-  });
+  try {
+    const id = req.params.id;
+    const tour = await Tour.findById(id);
+    res.status(200).json({
+      status: 'success',
+      data: {
+        tour,
+      },
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: 'fail',
+      message: error,
+    });
+  }
 };
 
 // post one new tour

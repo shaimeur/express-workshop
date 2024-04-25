@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const tourController = require('../controllers/tourController');
 
-router.param('id', tourController.checkId);
+// router.param('id', tourController.checkId);
 
 // Create a checkBody middleware
 // Check if body contains the name and price property
