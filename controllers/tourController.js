@@ -130,30 +130,55 @@ const createTour = async (req, res) => {
 
 // update a tour
 
-const updateTour = (req, res) => {
-  const id = +req.params.id;
+const updateTour = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { name, rating, price } = req.body;
+    const newUpdatedTour = {
+      name,
+      rating,
+      price,
+    };
 
-  const tour = tours.find((item) => item.id === id);
-  // console.log(tour);
-  // console.log(req.body);
+    const updatedTour = await Tour.findByIdAndUpdate(id, newUpdatedTour, {
+      new: true,
+    });
+    res.status(200).json({
+      status: 'succes',
+      data: {
+        updatedTour: updatedTour,
+      },
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: 'fail',
+      message: error,
+    });
+  }
 
-  const updatedTour = [...tours, Object.assign(tour, req.body)];
+  // const id = +req.params.id;
 
-  fs.writeFile(
-    `${__dirname}/dev-data/data/tours-simple.json`,
-    JSON.stringify(updatedTour),
-    (err) => {
-      if (err) {
-        console.log(err);
-      }
-      res.status(200).json({
-        status: 'success',
-        data: {
-          updateTour,
-        },
-      });
-    },
-  );
+  // const tour = tours.find((item) => item.id === id);
+  // // console.log(tour);
+  // // console.log(req.body);
+
+  // const updatedTour = [...tours, Object.assign(tour, req.body)];
+
+  // fs.writeFile(
+  //   `${__dirname}/dev-data/data/tours-simple.json`,
+  //   JSON.stringify(updatedTour),
+  //   (err) => {
+  //     if (err) {
+  //       console.log(err);
+  //     }
+  //     res.status(200).json({
+  //       status: 'success',
+  //       data: {
+  //         updateTour,
+  //       },
+  //     });
+  //   },
+  // );
 };
 
 // delete endpoint
