@@ -142,11 +142,12 @@ const updateTour = async (req, res) => {
 
     const updatedTour = await Tour.findByIdAndUpdate(id, newUpdatedTour, {
       new: true,
+      runValidators: true,
     });
     res.status(200).json({
       status: 'succes',
       data: {
-        updatedTour: updatedTour,
+        updatedTour,
       },
     });
   } catch (error) {
@@ -196,10 +197,10 @@ const deleteTour = async (req, res) => {
     //   });
     // }
     console.log('====>', deletedTour);
-    res.status(200).json({
+    res.status(204).json({
       status: 'success',
       message: 'Tour deleted with success !!',
-      deletedTour,
+      data: null,
     });
   } catch (error) {
     res.status(400).json({
