@@ -81,13 +81,9 @@ const getOneTour = async (req, res) => {
 // post one new tour
 const createTour = async (req, res) => {
   try {
-    const { name, rating, price } = req.body;
+    const data = req.body;
 
-    const newTour = {
-      name,
-      rating,
-      price,
-    };
+    const newTour = data;
     console.log(newTour);
 
     const createdTour = await Tour.create(newTour);
