@@ -37,7 +37,28 @@ const checkId = (req, res, next, val) => {
 const getAllTours = async (req, res) => {
   // console.log(req.requestTime);
   try {
-    const tours = await Tour.find();
+    console.log(req.query);
+
+    // BUILD QUERY
+    const queryObj = { ...req.query };
+    const excludedFileds = ['page', 'limit', 'fields', 'sort'];
+    excludedFileds.forEach((el) => delete queryObj[el]);
+    console.log('=+++++++++++>', queryObj);
+
+    const query = Tour.find(queryObj);
+
+    // other way to filter
+
+    // const query = await Tour.find()
+    //   .where('duration')
+    //   .equals('5')
+    //   .where('difficulty')
+    //   .equals('easy');
+
+    // EXCUTE THE QUERY
+    const tours = await query;
+
+    //SEND RESPONSE
 
     res.status(200).json({
       status: 'success',

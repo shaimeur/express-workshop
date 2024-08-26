@@ -1,9 +1,9 @@
 const dotenv = require('dotenv');
 const port = process.env.PORT || 2670;
+dotenv.config({ path: './config.env' });
 const host = '127.0.0.1';
 const app = require('./index');
 const { dbConnect } = require('./configDB/dbConnection');
-dotenv.config({ path: './config.env' });
 
 dbConnect();
 // const DB = process.env.DATABASE.replace(
