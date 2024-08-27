@@ -37,15 +37,40 @@ const checkId = (req, res, next, val) => {
 const getAllTours = async (req, res) => {
   // console.log(req.requestTime);
   try {
-    console.log(req.query);
+    // console.log(req.query);
 
     // BUILD QUERY
+    // 1) Filtring
     const queryObj = { ...req.query };
     const excludedFileds = ['page', 'limit', 'fields', 'sort'];
     excludedFileds.forEach((el) => delete queryObj[el]);
-    console.log('=+++++++++++>', queryObj);
+    // console.log('=+++++++++++>', queryObj);
 
-    const query = Tour.find(queryObj);
+    // 2) Advance Filtring
+    // my solution
+    // for (let el in queryObj) {
+    //   console.log(`${el} : ${queryObj[el]}`);
+    // }
+
+    const queryStr = JSON.stringify(queryObj);
+    // console.log(queryStr);
+    const modifiedQeryString = queryStr.replace(
+      /\b(gte|gt|lte|lt)\b/g,
+      (match) => `$${match}`,
+    );
+    // console.log('======================++>', modifiedQeryString);
+    const result = JSON.parse(modifiedQeryString);
+    // console.log('========++RESULT+++++++++++>', result);
+    // manuelle query
+    // {difficulty : "easy", duration : {$gte:"5"}
+
+    // what we got off the req.query
+    // {  difficulty: 'easy' , duration: { gte: '5' } }
+
+    const query = Tour.find(result);
+
+    // EXCUTE THE QUERY
+    const tours = await query;
 
     // other way to filter
 
@@ -54,10 +79,6 @@ const getAllTours = async (req, res) => {
     //   .equals('5')
     //   .where('difficulty')
     //   .equals('easy');
-
-    // EXCUTE THE QUERY
-    const tours = await query;
-
     //SEND RESPONSE
 
     res.status(200).json({
