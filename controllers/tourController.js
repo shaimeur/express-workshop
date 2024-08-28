@@ -37,16 +37,16 @@ const checkId = (req, res, next, val) => {
 const getAllTours = async (req, res) => {
   // console.log(req.requestTime);
   try {
-    // console.log(req.query);
+    console.log(req.query);
 
     // BUILD QUERY
-    // 1) Filtring
+    // 1)A) Filtring
     const queryObj = { ...req.query };
     const excludedFileds = ['page', 'limit', 'fields', 'sort'];
     excludedFileds.forEach((el) => delete queryObj[el]);
     // console.log('=+++++++++++>', queryObj);
 
-    // 2) Advance Filtring
+    // 2)B) Advance Filtring
     // my solution
     // for (let el in queryObj) {
     //   console.log(`${el} : ${queryObj[el]}`);
@@ -67,7 +67,16 @@ const getAllTours = async (req, res) => {
     // what we got off the req.query
     // {  difficulty: 'easy' , duration: { gte: '5' } }
 
-    const query = Tour.find(result);
+    // 2) Sorting
+
+    let query = Tour.find(result);
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ');
+      console.log(sortBy);
+      query = query.sort(sortBy);
+    } else {
+      query = query.sort('-createdAt');
+    }
 
     // EXCUTE THE QUERY
     const tours = await query;
@@ -171,11 +180,9 @@ const createTour = async (req, res) => {
 const updateTour = async (req, res) => {
   try {
     const id = req.params.id;
-    const { name, rating, price } = req.body;
+    const { ...myData } = req.body;
     const newUpdatedTour = {
-      name,
-      rating,
-      price,
+      ...myData,
     };
 
     const updatedTour = await Tour.findByIdAndUpdate(id, newUpdatedTour, {
