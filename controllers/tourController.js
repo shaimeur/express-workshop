@@ -88,6 +88,28 @@ const getAllTours = async (req, res) => {
       query = query.select('-__v'); // mongoose nedd the __v it's just to to set a default limiting field
     }
 
+    // 4) pagination
+
+    const page = +req.query.page || 1;
+    const limit = +req.query.limit || 100;
+    const skip = (page - 1) * limit;
+    console.log(
+      'page==>',
+      typeof page,
+      'limit===>',
+      typeof limit,
+      'skip===============>',
+      skip,
+    );
+    query = query.skip(skip).limit(limit);
+    if (req.query.page) {
+      const numTours = await Tour.countDocuments();
+      console.log('numTour===========>', numTours);
+      if (skip >= numTours) {
+        throw new Error('This page do not exit');
+      }
+    }
+
     // EXCUTE THE QUERY
     const tours = await query;
 
@@ -110,7 +132,7 @@ const getAllTours = async (req, res) => {
   } catch (error) {
     res.status(404).json({
       status: 'fail',
-      message: error,
+      message: error.message,
     });
   }
 };
