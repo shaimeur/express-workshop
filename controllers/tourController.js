@@ -78,6 +78,16 @@ const getAllTours = async (req, res) => {
       query = query.sort('-createdAt');
     }
 
+    // 3) Fields Limiting
+
+    if (req.query.fields) {
+      const myFields = req.query.fields.split(',').join(' ');
+      console.log(myFields);
+      query = query.select(myFields);
+    } else {
+      query = query.select('-__v'); // mongoose nedd the __v it's just to to set a default limiting field
+    }
+
     // EXCUTE THE QUERY
     const tours = await query;
 
