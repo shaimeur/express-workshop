@@ -4,6 +4,18 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`),
 );
 
+// creating aliasing middleware
+
+const aliasTopTour = (req, res, next) => {
+  req.query.limit = '5';
+  req.query.sort = '-ratingsAverage,-price';
+  req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
+
+  console.log(req.query);
+
+  next();
+};
+
 // checkBody Middleware
 
 const checkBody = (req, res, next) => {
@@ -37,7 +49,7 @@ const checkId = (req, res, next, val) => {
 const getAllTours = async (req, res) => {
   // console.log(req.requestTime);
   try {
-    console.log(req.query);
+    // console.log(req.query);
 
     // BUILD QUERY
     // 1)A) Filtring
@@ -72,7 +84,7 @@ const getAllTours = async (req, res) => {
     let query = Tour.find(result);
     if (req.query.sort) {
       const sortBy = req.query.sort.split(',').join(' ');
-      console.log(sortBy);
+      // console.log(sortBy);
       query = query.sort(sortBy);
     } else {
       query = query.sort('-createdAt');
@@ -82,7 +94,7 @@ const getAllTours = async (req, res) => {
 
     if (req.query.fields) {
       const myFields = req.query.fields.split(',').join(' ');
-      console.log(myFields);
+      // console.log(myFields);
       query = query.select(myFields);
     } else {
       query = query.select('-__v'); // mongoose nedd the __v it's just to to set a default limiting field
@@ -93,18 +105,18 @@ const getAllTours = async (req, res) => {
     const page = +req.query.page || 1;
     const limit = +req.query.limit || 100;
     const skip = (page - 1) * limit;
-    console.log(
-      'page==>',
-      typeof page,
-      'limit===>',
-      typeof limit,
-      'skip===============>',
-      skip,
-    );
+    // console.log(
+    //   'page==>',
+    //   typeof page,
+    //   'limit===>',
+    //   typeof limit,
+    //   'skip===============>',
+    //   skip,
+    // );
     query = query.skip(skip).limit(limit);
     if (req.query.page) {
       const numTours = await Tour.countDocuments();
-      console.log('numTour===========>', numTours);
+      // console.log('numTour===========>', numTours);
       if (skip >= numTours) {
         throw new Error('This page do not exit');
       }
@@ -309,4 +321,5 @@ module.exports = {
   createTour,
   checkId,
   checkBody,
+  aliasTopTour,
 };

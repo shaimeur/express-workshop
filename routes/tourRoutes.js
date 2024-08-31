@@ -9,6 +9,12 @@ const tourController = require('../controllers/tourController');
 // if not, send back 400 (bad request)
 // Add it to the post stack
 
+// aliasing
+
+router
+  .route('/top-5-cheap')
+  .get(tourController.aliasTopTour, tourController.getAllTours);
+
 router
   .route('/')
   .get(tourController.getAllTours)
